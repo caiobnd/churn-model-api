@@ -2,10 +2,11 @@
 __pycache__/
 *.pyc
 .env
+.venv/
 venv/
 
-# Data 
+# Data
 data/
 
-# Docker
-.dockerignore
+# Model
+model/
