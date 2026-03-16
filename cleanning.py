@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from constants import binary_columns,one_hot_columns
 
 def load_data(path):
     
@@ -15,10 +16,7 @@ def clean_data(df):
     return df
 
 def encoding(df):
-    
-    binary_columns  = ['gender', 'Partner', 'Dependents', 'PhoneService', 'PaperlessBilling' , 'Churn', 
-                       'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
-    one_hot_columns = ['MultipleLines', 'InternetService', 'Contract', 'PaymentMethod']
+    binary_columns = binary_columns + ['Churn']
     df['TotalCharges']          = df['TotalCharges'].astype(float)
     df.replace(['No internet service', 'No phone service'],'No', inplace=True)
     df_encoded                  = df.copy()

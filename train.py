@@ -1,6 +1,7 @@
 import joblib
 from cleanning  import split_data,load_data,encoding,clean_data
 from model      import train_logistic_regression,train_xgboost,train_random_forest
+from sklearn.metrics import classification_report
 from pathlib    import Path
 
 path_df     = Path('data/WA_Fn-UseC_-Telco-Customer-Churn.csv')
@@ -13,13 +14,16 @@ model_forest    = train_random_forest(X_train,y_train)
 model_xgboost   = train_xgboost(X_train,y_train)
 model_regression= train_logistic_regression(X_train,y_train)
 
-path_forest     = Path('model/churn_random_fores.pkl')
-path_xgboost    = Path('model/churn_xgboost.pkl')
-path_regression = Path('model/churn_lr.pkl')
+models=[model_forest,model_xgboost,model_regression]  
+    
+for model, name in zip(models, ['Random Forest', 'XGBoost', 'Logistic Regression']):
+    y_pred = model.predict(X_test)
+    print(f'\n{name}')
+    print(classification_report(y_test, y_pred))
 
-paths =[path_forest,path_xgboost,path_regression]
-models=[model_forest,model_xgboost,model_regression]
-
-for model, path in zip(models, paths):
-    print(f'Salving {model}')
-    joblib.dump(model,path)
+expected_columns =list(df_encoded.columns)
+expected_columns.remove('Churn')
+path_xgboost = Path('model/churn_xgboost.pkl')
+path_columns = Path('model/expected_columns.pkl')
+joblib.dump(model_xgboost,path_xgboost)
+joblib.dump(expected_columns,path_columns)
